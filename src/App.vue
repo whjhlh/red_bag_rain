@@ -6,13 +6,16 @@
 </template>
 
 <script>
-  import {Toast} from 'vant'
+  import request from '@/utils/request'
   export default {
     name: 'App',
     methods:{
-      test(){
-        //this.$toast.fail("操作失败")
-        Toast.fail("操作失败")
+      async test(){
+        // //this.$toast.fail("操作失败")
+        // Toast.fail("操作失败")
+        // axios.get('/persom.json')
+        let x = await request.get('api/v1/send/100/10')
+        console.log(x)
       }
     }
   }
