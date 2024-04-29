@@ -2,7 +2,7 @@
 <template>
   <van-overlay :show="isShow">
     <div class="wrapper">
-      <van-count-down v-if="isShow" :time="2000" v-slot="{ seconds }" @finish="finish">
+      <van-count-down v-if="isShow" :time="time" v-slot="{ seconds }" @finish="finish">
         <span class="seconds">{{ seconds }}</span>
       </van-count-down>
     </div>
@@ -20,7 +20,7 @@ export default {
   },
   props: ['onFinish'],
   methods: {
-    show(time = 3500) {
+    show(time) {
       this.isShow = true;
       this.time = time;
     },
