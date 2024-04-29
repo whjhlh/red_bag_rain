@@ -13,9 +13,9 @@ module.exports = defineConfig({
       '/dev-api':{
         //转发目标服务器
         target:'http://rb.atguigu.cn',
-        //影响后端接受 host 值
+        //影响后端接受请求头的 host 值
         changeOrigin:true,
-        //请求前缀带有dev-api,就跨域到 target 服务器中
+        //请求前缀带有dev-api,就跨域到 target 服务器中,重写路径
         pathRewrite:{'^/dev-api':''}
       }
     }
