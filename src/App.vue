@@ -13,13 +13,16 @@
   import  CountdownMask  from './components/CountdownMask';
   import  RecovedMask  from './components/RecovedMask';
   import  RedPacket from './class/RedPacket'
+  //用于发请求
+  import request from './utils/request';
 
   export default {
     name: 'App',
     components: {CountdownMask,RecovedMask},
     data(){
       return{
-        isShowRainContainer: false
+        isShowRainContainer: false,
+        rainKey:''
       }
     },
     methods: {
@@ -29,15 +32,16 @@
       },
       onRecovedClose(){
         console.log('用户关闭红包界面')
-        
       },
-      onRainEnd(){
+      async onRainEnd(){
         console.log('用户端雨到时间了')
-        this.$refs.recovedMask.show(78)
+        let {data}=await request.get('/api/v2/record/'+'${this.rainKey}')
+        console.log(data)
+        this.$refs.recovedMask.show(data)
       },
       //点击红包的回调
-      onClickRedPacket(){
-          console.log('用户点击了红包')
+      onClickRedPacket(){   
+        request.get('/api/v2/rob/${this.rainKey')
       },
       createRain(duration,speed){
         //展示下雨容器
@@ -55,11 +59,22 @@
           clearInterval(this.timer)
           this.onRainEnd()
         },duration)
+      },
+      //开始进行联调
+      async start(){
+        //请求服务器开启红包雨,并且,获取 红包雨唯一token
+        //await 等待服务器返回值
+        let {data}=await request.get('/api/v1/send/100/20')
+        //存取红包雨唯一token
+        this.rainKey=data
+        //开启倒计时
+        this.$refs.countdownMask.show(3500)
       }
     },
-    mounted(){
+     mounted(){
       //开启倒计时
-      this.$refs.countdownMask.show(4500)
+      // this.$refs.countdownMask.show(4500)
+      this.start()
     },
   }
 </script>

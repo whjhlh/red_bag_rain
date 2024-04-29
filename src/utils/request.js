@@ -12,7 +12,6 @@ const request = axios.create({
 request.interceptors.request.use(
     // 成功回调
     config => {
-        // console.log(1)
         config.headers.token = getToken()
         console.log(config)
         return config
