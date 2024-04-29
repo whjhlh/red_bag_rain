@@ -15,6 +15,7 @@
   import  RedPacket from './class/RedPacket'
   //用于发请求
   import request from './utils/request';
+  import getToken from './utils/getToken';
 
   export default {
     name: 'App',
@@ -22,13 +23,18 @@
     data(){
       return{
         isShowRainContainer: false,
-        rainKey:''
+        //下雨速度
+        generationRate:'',
+        //红包标识
+        redPackeageKey:'',
+        //下雨时间
+        duration:''
       }
     },
     methods: {
       onCountFinish() {
         console.log('客户端倒计时结束了')
-        this.createRain(5000,200)
+        this.createRain( this.duration,this.generationRate)
       },
       onRecovedClose(){
         console.log('用户关闭红包界面')
@@ -74,7 +80,21 @@
      mounted(){
       //开启倒计时
       // this.$refs.countdownMask.show(4500)
-      this.start()
+      //this.start()
+      let activityKey= ''
+      let token=getToken()
+      const ws=new WebSocket('ws://rb.atguigu.cn/api/websocket/${activityKey}/${token}')
+      ws.onopen =()=>{
+        console.log('ws连接建立成功')
+      }
+      ws.onmessage=( event)=>{
+        const {duration,generationRate,redPackeageKey}=JSON.parse(event.data)
+        this.duration=duration
+        this.generationRate=generationRate
+        this.redPackeageKey=redPackeageKey
+        //解析完连接 websocket 数据后开启倒计时
+        this.$refs.countdownMask.show(3500)
+      }
     },
   }
 </script>
